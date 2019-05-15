@@ -26,6 +26,10 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - pginit:/docker-entrypoint-initdb.d
+      - pgconf:/etc/postgresql/postgresql.conf
   # to visit psql
   # > docker-compose up -d
   # you have to wait for a while before executing psql (maybe 30 sec),
@@ -38,3 +42,9 @@ services:
     links:
       - db
     command: psql -h db -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+
+
+volumes:
+  pgdata:
+  pginit:
+  pgconf:
