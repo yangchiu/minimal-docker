@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+server_env = os.environ.get('SERVER_ENV', '')
+if server_env != 'production':
+    import keys.local_keys as keys
+
 TIME_ZONE = 'Asia/Taipei'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -27,12 +31,13 @@ SECRET_KEY = 'wx2pqk(l(wakp3+i0e-ica^#mj2y6nk%q6cs%eqnaowj46gn7t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '192.168.10.245']
-
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS', '')] \
+                if server_env == 'production' else [keys.ALLOWED_HOSTS]
 
 # Application definition
 
 INSTALLED_APPS = [
+    'polls.apps.PollsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -78,9 +83,12 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', ''),
-        'USER': os.environ.get('POSTGRES_USER', ''),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', '')
+        'NAME': os.environ.get('POSTGRES_DB', '') \
+                if server_env == 'production' else keys.POSTGRES_DB,
+        'USER': os.environ.get('POSTGRES_USER', '') \
+                if server_env == 'production' else keys.POSTGRES_USER,
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', '') \
+                    if server_env == 'production' else keys.POSTGRES_PASSWORD
     }
 }
 

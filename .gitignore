@@ -2,8 +2,12 @@ migrations/
 __pycache__/
 .env/
 .settings/
-keys/
 
+local_keys.py
+production_keys.py
+
+*.project
+*.pydevproject
 *.log
 *.sqlite3
 *.out
