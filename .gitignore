@@ -5,6 +5,7 @@ __pycache__/
 
 local_keys.py
 production_keys.py
+dump.rdb
 
 *.project
 *.pydevproject

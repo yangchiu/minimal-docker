@@ -38,7 +38,6 @@ services:
   # > SELECT 1;
   # > \dt (show tables)
   # > \q (quit)
-  # > exit
   psql:
     image: 'postgres:11-alpine'
     links:

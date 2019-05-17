@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS', '')] \
 # Application definition
 
 INSTALLED_APPS = [
+    'worker.apps.WorkerConfig',
     'polls.apps.PollsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_rq',
 ]
 
 MIDDLEWARE = [
@@ -90,6 +92,16 @@ DATABASES = {
     }
 }
 
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'PASSWORD': os.environ.get('REDIS_PASSWORD', '') \
+                    if server_env == 'production' else keys.REDIS_PASSWORD,
+        'DEFAULT_TIMEOUT': 86400,
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
