@@ -43,6 +43,16 @@ services:
     links:
       - db
     command: psql -h db -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+  web:
+    build: .
+    volumes:
+      - .:/code
+    command: python manage.py migrate && python manage.py runserver 0:8000 && python manage.py rqworker
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+      - redis
 
 
 volumes:
