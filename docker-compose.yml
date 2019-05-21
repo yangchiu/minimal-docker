@@ -42,18 +42,30 @@ services:
     image: 'postgres:11-alpine'
     links:
       - db
-    command: psql -h db -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+    command: PGPASSWORD=${POSTGRES_PASSWORD} psql -h db -U ${POSTGRES_USER} -d ${POSTGRES_DB}
   web:
-    build: .
+    build:
+      context: ./mysite
+      dockerfile: Dockerfile
     volumes:
       - .:/code
-    command: python manage.py migrate && python manage.py runserver 0:8000 && python manage.py rqworker
+    command: bash -c "python3 ./mysite/manage.py migrate && python3 ./mysite/manage.py runserver 0.0.0.0:8000"
     ports:
       - '8000:8000'
+    links:
+      - db
+      - redis
     depends_on:
       - db
       - redis
-
+    environment:
+      - SERVER_ENV=${SERVER_ENV}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
 
 volumes:
   pgdata:
