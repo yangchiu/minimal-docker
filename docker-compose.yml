@@ -49,7 +49,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/code
-    command: bash -c "python3 ./mysite/manage.py migrate && python3 ./mysite/manage.py runserver 0.0.0.0:8000"
+    command: bash -c "./run_web.sh"
     ports:
       - '8000:8000'
     links:
