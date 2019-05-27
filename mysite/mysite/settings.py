@@ -89,13 +89,15 @@ DATABASES = {
                 if server_env == 'production' else keys.POSTGRES_USER,
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', '') \
                     if server_env == 'production' else keys.POSTGRES_PASSWORD,
-        'HOST': 'db'
+        'HOST': os.environ.get('POSTGRES_HOST', '') \
+                if server_env == 'production' else keys.POSTGRES_HOST,
     }
 }
 
 RQ_QUEUES = {
     'default': {
-        'HOST': 'redis',
+        'HOST': os.environ.get('REDIS_HOST', '') \
+                if server_env == 'production' else keys.REDIS_HOST,
         'PORT': 6379,
         'DB': 0,
         'PASSWORD': os.environ.get('REDIS_PASSWORD', '') \
